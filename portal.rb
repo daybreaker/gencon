@@ -103,7 +103,10 @@ class Portal
     self.class.post(
       event_url,
       query: body, # form encode this.
-      headers: { 'Cookie' => cookies },
+      headers: { 
+        'Cookie' => cookies,
+        'Host': 'book.passkey.com',
+      },
     )
   end
 
