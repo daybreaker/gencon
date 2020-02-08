@@ -16,7 +16,8 @@ opts = Slop.parse do |o|
   o.integer '--max_distance'
   o.string '--checkin'
   o.string '--checkout'
-  o.string '-k', '--key'
+  o.string '-k', '--key1'
+  o.string '-l', '--key2'
   o.integer '-t', '--minutes', default: 1
   o.bool '-b', '--browser', default: false
 end
@@ -27,11 +28,14 @@ class Portal
   include ERB::Util
   include CGI::Util
 
-  base_uri 'https://aws.passkey.com'
+  base_uri 'https://book.passkey.com'
 
   def initialize(opts)
     @first_day = '2018-08-02'
     @last_day = '2018-08-05'
+
+    @event_id = 49822766
+    @owner_id = 10909638
 
     @opts = opts
     @alerted = false
@@ -54,11 +58,11 @@ class Portal
   end
 
   def event_url
-    '/event/49547714/owner/10909638/rooms/select'
+    "/event/#{@event_id}/owner/#{@owner_id}/rooms/select"
   end
 
   def start_url
-    "/reg/#{@opts[:key]}/null/null/1/0/null"
+    "/reg/#{@opts[:key1]}/#{@opts[:key2]}"
   end
 
   def distance_units
@@ -93,8 +97,10 @@ class Portal
   end
 
   def search_resp
+    # Get the session cokies from the initial passkey login
     resp = self.class.get(start_url)
 
+    # Store the cookies
     cookies = get_cookies(resp)
 
     # puts body.inspect
@@ -103,7 +109,7 @@ class Portal
     self.class.post(
       event_url,
       query: body, # form encode this.
-      headers: { 
+      headers: {
         'Cookie' => cookies,
         'Host': 'book.passkey.com',
       },
@@ -125,7 +131,7 @@ class Portal
   def alert(hotels)
     if hotels.count > 0 && !@alerted && @opts.browser?
       @alerted = true
-      Launchy.open("https://aws.passkey.com/reg/#{@opts[:key]}/null/null/1/0/null")
+      Launchy.open("https://book.passkey.com/reg/#{@opts[:key1]}/#{@opts[:key2]}")
     end
   end
 

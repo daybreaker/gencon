@@ -40,16 +40,17 @@ bundle install
 
 ### Running the script
 
-Go the GenCon Housing Portal which looks like "https://aws.passkey.com/reg/XXXXXXX-XXXX/null/null/1/0/null" and find the value that replaces `XXXXXXX-XXXX`. This is your personal housing portal key.
+Go to the GenCon Housing Portal which looks like "https://book.passkey.com/reg/XXXXXXXX-XXXX/YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY".
 
-The script runs on the command line like:
+Pass the two unique IDs as separate key arguments:
 
-`ruby portal.rb --key XXXXXXX-XXXX`
+`ruby portal.rb --key1 XXXXXXXX-XXXX --key2 YYY...YYY`
 
 There are several options you can add, like:
 
 ```
--k, --key                        Your portal key (required)
+-k, --key1                       Your portal key (required)
+-l, --key2                       Second part of the portal key (required)
 -a, --show_all   default: false  Show All Hotels (default only shows downtown hotels)
 -w, --wednesday  default: false  Set checkin day to Wednesday (default is Thursday)
 -m, --monday     default: false  Set checkout day to Monday (default is Sunday)
@@ -67,7 +68,7 @@ Anything with a default of false means you dont need to include a value after us
 A sample call is:
 
 ```
-ruby portal.rb --key XXXXXXX-XXXX -awmb --max_distance 12 --miles
+ruby portal.rb --key1 XXXXXXX-XXXX -key2 YYYYY...YYYYY -awmb --max_distance 12 --miles
 ```
 
 Which will show all hotels (`-a`) within 12 miles (`--max_distance 12 --miles`), checking in on wednesday (`-w`) and checking out on monday (`-m`), and opening a browser window if it finds results (`-b`).
@@ -83,6 +84,7 @@ In the future, I'll be adding the following:
 - [ ] Hotel Name filter (ie: Marriott, Alexander, etc)
 - [ ] System Pop Up Alert
 - [ ] SMS text alert
+- [ ] Ability to use acknowledgement number for people with existing reservations
 
 ## Contributing
 
